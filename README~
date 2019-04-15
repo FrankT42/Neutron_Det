@@ -1,0 +1,96 @@
+//=============================================
+//             Detector Simulation
+//                 April 2018
+//		   Updated July 2018 
+//
+//=============================================
+//  Author:Frank Thomson
+//  Simulation of Scintillation Detector
+//  with neutron sensitivity and optical
+//  transport with setable array
+//=============================================
+
+
+This is the user manual for the Geant4 simulation in a way
+since this is set up to be fairly modular it can be easily
+modified by the user.
+
+Firstly, the program will build with the name N_G_Det and
+can be used as in either way 1 or 2
+
+1.
+
+./N_G_Det
+
+this will cause an interactive instance, with default being OpenGL
+this can be altered in vis.mac, other optins such as the verbose
+level is delt with in init_vis.mac as well as the default particle
+source
+
+2.
+
+./N_G_Det macro.mac
+
+This will cause the simulation to start in batch mode, executing
+what is in the macro.
+
+In each case, two files will be produced, one is G4History.macro
+this is, as indicated, this shows the command history. The other
+file is N_G_Det.root, this is a root file containing the measured
+parameters.
+
+Several macros are provided in the install, AmBe.mac is a AmBe
+source using data from papers, Beam.mac is a standard beam, with
+662keV gammas, but can be changed as nessesery. The other macros
+are used in setup of the interactive session and can be changed
+as needed, with only vis.mac usually being of concern. init_vis.mac
+can be changed to give different default source.
+
+If you are making macros, it is needed to include the line
+/run/initialize as I have made it possible to change engine
+settings that are not possible to change after inintialization,
+this is only a small caveat, for a drastic change in power of
+the macros.
+
+It is possible to change the array size and pixel pitch in the
+DetectorConstruction.cc.
+This is done by changing the varibles at the top, it is imperitive
+to change this at the top as they are used at a file scope
+the variables in question are:
+SiPM_n
+SiPM_m
+SiPM_pitch
+SiPM_sep
+
+these are the n and m values and the ptich and seperation
+the pitch and sepeartion are halfed, as always in geant4
+ie 3mm=1.5mm entered, and the units are mm.
+
+The array is set to always be centered at (0,0,0) in the simulation
+and the thickness is 0.6mm. In this version they are made of
+perspex for complicated reasons, but this will be fixed in a later
+build. If it really irratates, it is a easy fix.
+
+If you need other measurements, this will require changes to
+HistoManager, EventAction and Stepping Action
+
+Anything put in the fScint placement will be considered the
+scintillator and energy deposited in it will be tracked,
+the scintillation light from any scintillator will be added
+to one global value currently(easily changed), this was done
+as only one scintillator or array is usually used.
+
+Anything with the SiPM_log logical volume will be considered
+the detector; position, time and photons will be extracted as
+one detector. This can be made to be read out individually
+but causes increased runtimes.
+
+I think that is about it.
+
+Happy Simulating
+
+
+__F.S.T__
+
+July 2018
+
